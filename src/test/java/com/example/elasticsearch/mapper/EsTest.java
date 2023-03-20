@@ -4,7 +4,6 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import com.example.elasticsearch.entity.Poetries;
 import com.example.elasticsearch.entity.Product;
-import com.example.elasticsearch.service.IPoetriesService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -47,14 +46,9 @@ public class EsTest {
     }
 
     @Autowired
-    private ProductDao productDao;
+    private ProductRepository productDao;
     @Autowired
     private CustomProductRepository repository;
-
-    @Autowired
-    private IPoetriesService poetriesService;
-    @Autowired
-    private PoetriesRepository poetriesRepository;
 
     /**
      * 新增

@@ -1,5 +1,6 @@
 spring:
   elasticsearch:
+    # ES服务以及对应的端口 该端口没有设置密码和集群单机就用9200  集群的话使用9300进行通信  集群使用多个ip使用,分割
     uris: 192.168.154.128:9200
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

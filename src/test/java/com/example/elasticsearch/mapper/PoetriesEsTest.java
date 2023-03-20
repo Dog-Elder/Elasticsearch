@@ -84,12 +84,25 @@ public class PoetriesEsTest {
                 .build();
 
         SearchHits<Poetries> search = elasticsearchRestTemplate.search(build, Poetries.class);
+        //获取命中的数据
         List<SearchHit<Poetries>> searchHits = search.getSearchHits();
         List<Poetries> list = new ArrayList<>();
         for (SearchHit<Poetries> hit : searchHits) {
+            //获取高亮数据
             Map<String, List<String>> map = hit.getHighlightFields();
             List<String> content = map.get("content");
             if (!CollectionUtils.isEmpty(content)) {
+                //将高亮数据替换原有的数据
+                //[
+                //    {
+                //        "poetId": 147,
+                //        "title": "赋得长亭柳",
+                //        "content": "赠行多折取，那得到<em>深秋</em>。",
+                //        "createdAt": 1401638400000,
+                //        "id": 12551,
+                //        "updatedAt": 1401638400000
+                //    }
+                //]
                 hit.getContent().setContent(content.get(0));
             }
             list.add(hit.getContent());
