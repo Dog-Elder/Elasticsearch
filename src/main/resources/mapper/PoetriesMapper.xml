@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.elasticsearch.mapper.PoetriesMapper">
+
+    <resultMap type="Poetries" id="PoetriesResult">
+        <result property="id"    column="id"    />
+        <result property="poetId"    column="poet_id"    />
+        <result property="content"    column="content"    />
+        <result property="title"    column="title"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectPoetriesVo">
+        select id, poet_id, content, title, created_at, updated_at from poetries
+    </sql>
+
+    <select id="selectPoetriesList" parameterType="Poetries" resultMap="PoetriesResult">
+        <include refid="selectPoetriesVo"/>
+        <where>
+            <if test="poetId != null "> and poet_id = #{poetId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectPoetriesById" parameterType="Long" resultMap="PoetriesResult">
+        <include refid="selectPoetriesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPoetries" parameterType="Poetries" useGeneratedKeys="true" keyProperty="id">
+        insert into poetries
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="poetId != null">poet_id,</if>
+            <if test="content != null">content,</if>
+            <if test="title != null">title,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="poetId != null">#{poetId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="title != null">#{title},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePoetries" parameterType="Poetries">
+        update poetries
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="poetId != null">poet_id = #{poetId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePoetriesById" parameterType="Long">
+        delete from poetries where id = #{id}
+    </delete>
+
+    <delete id="deletePoetriesByIds" parameterType="String">
+        delete from poetries where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
